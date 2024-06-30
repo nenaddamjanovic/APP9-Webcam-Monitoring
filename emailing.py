@@ -11,6 +11,7 @@ email_receiver = "informaticarmreze@gmail.com"
 
 def send_email(image_path):
     # Create an email message object
+    print("send email function started")
     email_message = EmailMessage()
     email_message["Subject"] = "New customer entered in shop"
     email_message.set_content("Hey, we just seen a new customer!!")
@@ -34,6 +35,9 @@ def send_email(image_path):
     gmail.login(email_sender, password)  # Log in to the SMTP server
     gmail.sendmail(email_sender, email_receiver, email_message.as_string())  # Send the email
     gmail.quit()
+
+    print("send email function ended")
+
 
 if __name__ == "__main__":
     send_email(image_path="images/1.png")

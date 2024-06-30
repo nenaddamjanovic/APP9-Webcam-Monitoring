@@ -2,7 +2,7 @@ import time
 from emailing import send_email
 from cleaning import clean_folder
 import glob
-import os
+from threading import Thread
 import cv2
 # install over terminal pip install opencv-python
 # cv2 also includes nympy library
@@ -59,8 +59,16 @@ while True:
 
     # Check for motion (transition from detected to not detected)
     if status_list[0] == 1 and status_list[1] == 0:
-        send_email(image_with_object)  # Send an email notification
-        clean_folder()  # Clear folder of images
+
+        email_thread = Thread(target=send_email, args=(image_with_object, ))
+        email_thread.daemon = True
+
+        clean_thread = Thread(target=clean_folder)
+        clean_thread.daemon = True
+
+        email_thread.start()
+
+
 
     # Display the original frame with rectangles
     cv2.imshow("Video", frame)
@@ -70,4 +78,6 @@ while True:
         break
 
 video.release()  # Release the camera
+clean_thread.start()
+
 cv2.destroyAllWindows()  # Close all OpenCV windows
