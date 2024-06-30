@@ -58,7 +58,7 @@ while True:
 
     # Check for motion (transition from detected to not detected)
     if status_list[0] == 1 and status_list[1] == 0:
-        send_email()  # Send an email notification
+        send_email(image_with_object)  # Send an email notification
 
     # Display the original frame with rectangles
     cv2.imshow("Video", frame)
