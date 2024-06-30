@@ -1,5 +1,6 @@
 import time
 from emailing import send_email
+import glob
 import cv2
 # install over terminal pip install opencv-python
 # cv2 also includes nympy library
@@ -10,10 +11,12 @@ time.sleep(1)  # Wait for the camera to warm up
 
 first_frame = None
 status_list = []  # List to track motion status
+count = 1
 
 while True:
     status = 0  # No motion detected by default
     check, frame = video.read()  # Read a frame from the camera
+
     # Convert to grayscale
     gray_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
     # Apply Gaussian blur
@@ -42,6 +45,13 @@ while True:
 
         if rectangle.any():
             status = 1  # Motion detected
+
+            cv2.imwrite(f"images/screenshot{count}.png", frame)
+            count = count + 1
+            all_images = glob.glob("images/*.png")
+            index = int(len(all_images) / 2)
+            image_with_object = all_images[index]
+
 
     status_list.append(status)  # Update the status list
     status_list = status_list[-2:]  # Keep only the last two status values
