@@ -1,6 +1,8 @@
 import time
 from emailing import send_email
+from cleaning import clean_folder
 import glob
+import os
 import cv2
 # install over terminal pip install opencv-python
 # cv2 also includes nympy library
@@ -52,13 +54,13 @@ while True:
             index = int(len(all_images) / 2)
             image_with_object = all_images[index]
 
-
     status_list.append(status)  # Update the status list
     status_list = status_list[-2:]  # Keep only the last two status values
 
     # Check for motion (transition from detected to not detected)
     if status_list[0] == 1 and status_list[1] == 0:
         send_email(image_with_object)  # Send an email notification
+        clean_folder()  # Clear folder of images
 
     # Display the original frame with rectangles
     cv2.imshow("Video", frame)
